@@ -24,7 +24,7 @@ export const usersPost = async (req, res, next) => {
         found = await User.findOne({name: name, age: age});
     } catch {
         const error = new Error("Could not query database. Please try again");
-        error.statusCode(500);
+        error.statusCode = 500;
         return next(error);
     }
     
