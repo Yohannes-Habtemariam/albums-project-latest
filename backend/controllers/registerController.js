@@ -1,10 +1,8 @@
-// * Task 1, Step 6
 import User from "../models/user.js";
 
 export const registerPost = async (req, res, next) => {
     const { username, password, firstName, lastName, emailAddress } = req.body;
-    
-    // * Task 1, Step 7 starts here...
+  
     let foundUsername;
     
     try {
@@ -34,12 +32,9 @@ export const registerPost = async (req, res, next) => {
             err.statusCode = 500;
             return next(err);
         }
+        
+        res.status(201).json({id: newUser._id});
     
-        // Send a response to the client containing the new user object in a JSON format
-        res.status(201).json(newUser);
-    
-    // If there is already a user in the db with the username received from the frontend
-    // Create an error object with a relevant message and statusCode, and pass it to the error handling middleware
     } else {
         const err = new Error("Sorry, this username has been taken. Please choose another");
         err.statusCode = 409;   // Conflict

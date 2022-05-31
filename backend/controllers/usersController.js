@@ -1,24 +1,27 @@
 import { db } from "../index.js";
 import { v4 as uuid } from "uuid";
+import User from "../models/user.js";
 
 // ==============================================
 // GET the logged in user's data
 // ==============================================
 
-export const getUserData = (req, res, next) => {
+export const getUserData = async(req, res, next) => {
     // Take the :id parameter from the request path ("/users/:id/albums")
     const userId = req.params.id;
 
-    // Try to find a user in the database file's "users" array with the same id
-    // If you find a user object with the correct id, make a copy and put it in the "foundUser" variable
-    // If you do not find the user, "foundUser" = undefined
-    const foundUser = db.data.users.find(user => user.id === userId);
+    let foundUser;
+    try{
+        foundUser = await User.findById(userId);
+    }catch{
+        const error = new Error("Could not query database. Please try again!");
+        error.statusCode = 500;
+        return next(error);
+    }
+    
 
     // If a user was found with the same id as the :id parameter...
     if (foundUser) {
-        // Send in the response back to the frontend:
-        //  - firstName
-        //  - list of albums
         const userData = {
             firstName: foundUser.firstName,
             albums: foundUser.albums

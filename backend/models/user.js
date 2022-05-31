@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
-// * Task 1, Step 4
 const userSchema = new Schema({
     username: { type: String, required: true },
     password: { type: String, required: true },
@@ -18,7 +17,6 @@ const userSchema = new Schema({
     ]
 });
 
-// * Task 1, Step 5
 const User = mongoose.model("User", userSchema);
 
 export default User;
