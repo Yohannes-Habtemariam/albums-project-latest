@@ -1,9 +1,7 @@
 import express from "express";
 import cors from "cors";
-import { Low, JSONFile } from "lowdb";
 import morgan from "morgan";
 import mongoose from "mongoose";
-
 import globalErrorHandler from "./middleware/globalErrorHandler.js";
 import registerRouter from "./routes/register.js";
 import loginRouter from "./routes/login.js";
@@ -19,9 +17,6 @@ mongoose.connect("mongodb://localhost:27017/albums-project");
 // Callbacks for mongoose - one for if the db connection opens successfully, another for if there's an error
 mongoose.connection.on("open", () => console.log("Database connection established"));
 mongoose.connection.on("error", () => console.error);
-
-const adapter = new JSONFile("./data/db.json");
-export const db = new Low(adapter);
 
 
 // Use morgan to make a small log every time a request is received

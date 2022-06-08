@@ -101,6 +101,7 @@ const Albums = props => {
         }
 
         const response = await fetch(process.env.REACT_APP_SERVER_URL + `/users/${props.currentUserId}/albums`, settings);
+        
         const parsedRes = await response.json();
 
         try {
@@ -114,6 +115,31 @@ const Albums = props => {
         } catch (err) {
             alert(err.message);
         }
+    }
+
+    const deleteSingleAlbum = async event => {
+        const albumId = event.target.parentElement.id;
+
+        const settings = {
+            method: "DELETE"
+        }
+
+        const response = await fetch(process.env.REACT_APP_SERVER_URL + `/users/${props.currentUserId}/albums/${albumId}`, settings);
+        
+        const parsedRes = await response.json();
+
+        try {
+            if (response.ok) {
+                //setAlbums(parsedRes);
+                setAlbums(parsedRes)
+            } else {
+                //throw new Error(parsedRes.message);
+                alert("Unsuccessful request")
+            }
+        } catch (err) {
+            alert(err.message);
+        }
+        
     }
 
     return (
@@ -135,16 +161,19 @@ const Albums = props => {
                     <label>Year</label>
                     <input name="year" onChange={updateData} value={albumYear} />
                 </div>
-                <button>Submit Album</button>
+                <button>Create Album</button>
             </form>
-            <button onClick={deleteAllAlbums}>Delete all albums!</button>
+            <button onClick={deleteAllAlbums}>Delete Album</button>
 
             <div>
                 <h2>Current Albums</h2>
                 <ul>
                     {
                         albums.map(album => {
-                            return <li key={album.id}>{album.albumTitle} by {album.band} ({album.albumYear})</li>
+                            return <li key={album._id} id={album._id}>
+                                {album.albumTitle} by {album.band} ({album.albumYear})
+                                <span onClick={deleteSingleAlbum}> X </span>
+                            </li>
                         })
                     }
                 </ul>

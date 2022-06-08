@@ -10,9 +10,9 @@ const userSchema = new Schema({
     emailAddress: { type: String, required: true },
     albums: [
         { 
-            title: { type: String, required: true },
             band: { type: String, required: true },
-            year: { type: Number, required: true }
+            albumTitle: { type: String, required: true },
+            albumYear: { type: Number, required: true }
         }
     ]
 });

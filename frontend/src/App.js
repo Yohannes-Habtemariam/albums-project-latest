@@ -20,14 +20,25 @@ const App = () => {
     if (!isLoggedIn) {
         // Display the login view
         if (showLogin) {
-            return <Login setShowLogin={setShowLogin} setIsLoggedIn={setIsLoggedIn} setCurrentUserId={setCurrentUserId} />
+            return <Login 
+                setShowLogin={setShowLogin} 
+                setIsLoggedIn={setIsLoggedIn} 
+                setCurrentUserId={setCurrentUserId} 
+            />
         // Display the register view
         } else {
-            return <Register setShowLogin={setShowLogin} setIsLoggedIn={setIsLoggedIn} setCurrentUserId={setCurrentUserId} />
+            return <Register 
+                setShowLogin={setShowLogin} 
+                setIsLoggedIn={setIsLoggedIn} 
+                setCurrentUserId={setCurrentUserId} 
+            />
         }
     // Else, if a user is logged in, display the "albums" page for that user
     } else {
-        return <Albums currentUserId={currentUserId} logout={logout}/>
+        return <Albums 
+            currentUserId={currentUserId} 
+            logout={logout}
+        />
     }
 }
 

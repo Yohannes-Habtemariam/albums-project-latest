@@ -1,12 +1,14 @@
 import express from "express";
-import { getUserData, postAlbum, deleteAlbums } from "../controllers/usersController.js";
+import { getUserData, postAlbum, deleteAlbums, deleteSingleAlbum } from "../controllers/usersController.js";
 
 const router = express.Router();
 
-router.get("/:id", getUserData);    // GET /user/1234
+router.get("/:id", getUserData);    
 
-router.post("/:id/albums", postAlbum);    // POST /user/1234/albums
+router.post("/:id/albums", postAlbum);  
 
-router.delete("/:id/albums", deleteAlbums);    // DELETE /user/1234/albums
+router.delete("/:id/albums", deleteAlbums);
+
+router.delete("/:id/albums/:albumId", deleteSingleAlbum);
 
 export default router;
