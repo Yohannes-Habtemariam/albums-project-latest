@@ -100,6 +100,8 @@ export const deleteAlbums = async (req, res, next) => {
   
 };
 
+
+// Delete single album
 export const deleteSingleAlbum = async (req, res, next) => {
   const userId = req.params.id;
   const albumId = req.params.albumId;
@@ -112,4 +114,21 @@ export const deleteSingleAlbum = async (req, res, next) => {
   }
   res.json(updateAlbum.albums)
 
+}
+
+
+// Delete a user
+export const deleteUser = async (req, res, next) => {
+  // find user id
+  const userId = req.params.id;
+
+  // find user using id and delete 
+  let foundUser;
+  try{
+    foundUser = await User.findByIdAndRemove(userId)
+  }catch{
+    return next( new createError.InternalServerError("The user could not be deleted. Please try again!"));
+  }
+
+  res.json({ message: `The account belong to ${foundUser.firstName} has been successfully deleted. Come back soon!` })
 }

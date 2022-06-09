@@ -10,10 +10,36 @@ const App = () => {
     const [ currentUserId, setCurrentUserId ] = useState("");
     const [ showLogin, setShowLogin ] = useState(true);
 
+    // To sign out from your account
     const logout = () => {
         setCurrentUserId("");
         setIsLoggedIn(false);
         setShowLogin(true);
+    }
+
+    // to delete user account
+    const deregister = async () => {
+        const settings = {
+            method: "DELETE"
+        }
+
+        const response = await fetch(process.env.REACT_APP_SERVER_URL + `/users/${currentUserId}`, settings);
+
+        const data = await response.json();
+
+        try{
+            if(response.ok){
+                alert(data.message);
+                setIsLoggedIn(false); 
+                setShowLogin(true)
+                setCurrentUserId("");
+                
+            } else{
+                throw new Error(data.message)
+            }
+        }catch (err) {
+            alert(err.message)
+        }
     }
 
     // If no user is currently logged in
@@ -31,6 +57,7 @@ const App = () => {
                 setShowLogin={setShowLogin} 
                 setIsLoggedIn={setIsLoggedIn} 
                 setCurrentUserId={setCurrentUserId} 
+                //deregister={deregister}
             />
         }
     // Else, if a user is logged in, display the "albums" page for that user
@@ -38,6 +65,7 @@ const App = () => {
         return <Albums 
             currentUserId={currentUserId} 
             logout={logout}
+            deregister={deregister}
         />
     }
 }

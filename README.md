@@ -1,3 +1,66 @@
+# Task 10
+
+Let's practice updating our "User" schema...
+
+1. Make both the `username` and `emailAddress` address unique.   
+    - Once you have done this, you can go to the `registerPost` controller function (in `/controllers/registerController.js`), and remove the functionality to check whether a username has already been taken. The schema can handle this now.
+    - Test your changes by trying to create two users with the same username. Also try to create two users with the same email address. In both cases, you should no longer be able to create the second user.
+    - In both cases, it is ok to send the same error message to the frontend, e.g. "User could not be created. Please try again". Soon, we will look at how to identify the specific cause of an error. :-)
+
+2. Use a pre-save hook to give some default values to your "User" documents.
+    - If no first name is provided during registration, the default should be "John"
+    - If no last name is provided during registration, the default should be "Doe"
+    - Again, you should test your changes and make sure you get the expected result.
+
+3. Make it so that each of your documents has `createdAt` and `updatedAt` properties.
+    - To test this, you can create a new user, give them a new album and delete that album. After each of these steps, check the document in your database and make sure the "createdAt" and "updatedAt" properties look the way you would expect.
+
+# Task 9
+
+Lets finally explore how we can use Mongoose to **delete** a document from your collection!
+
+## Part 1: Frontend
+
+- Create a new component called `Deregister`. This should render a simple button with a `className` of `logout-btn`. Don't forget to export the new component. 
+- Import your new component into `/views/Albums.js` and render it to the right of the `<Logout />` component.
+- Now, in **App.js**, create a new function called `deregister`. When called, this should:
+    - Use `fetch` to send a HTTP DELETE request (using `async await` syntax) to `http://localhost:3001/users/[id_of_current_user]` (you will have to replace the part in square brackets yourself!).
+    - For now you can just define the fetch request and put the server's response into a variable called `response`. We will deal with the actual server response later!
+    - When you are done, you should pass a reference to your function down, using **props**, to the grandchild `Deregister` component. When you click the button rendered by `<Deregister />`, you should call the `deregister` function in `App.js`.
+    
+## Part 2: Backend
+
+- Now, in the backend, we need to create a route to handle the request you just defined.
+- Create the route in `routes/users.js`. Hint: keep an eye on the HTTP method you used in the request!
+- Create a controller function called `deleteUser` in `/controllers/usersController.js`. Make sure this is called whenever a request is received by your new route.
+- In your `deleteUser` controller function, use the new Mongoose method **`findByIdAndRemove`**. This takes just one argument - the **id** of the document to delete from the collection. It will then find that document and delete it!
+    - Can you remember how to get the id of the user who sent the request from the request object?
+- In case something goes wrong with your query, make sure to also add error handling using `http-errors`.
+- Finally, if the query succeeds, send back a response to the frontend. The response should contain a JSON object with the following structure
+
+```json
+{ message: "Your account has been successfully deleted. Come back soon!" }
+```
+
+## Part 3: Frontend
+
+- Back in the `deregister` function in `App.js`, we now need to handle the server's response to your `fetch` request.
+- If the response shows the request was **successful** ("ok"), display an alert with the message received in the response ("Your account has been successfully deleted. Come back soon!").
+- Before you finish, also update the three state variables in App.js (in the following order) to: 
+    - "Log out of" the Albums view
+    - Render the Login view instead 
+    - Set the value of the current user's id to an empty string
+- However, if the response indicates the request was **unsuccessful**, simply display an alert with the message received in the response.
+
+## Part 4: Testing
+
+- Finally, test your new functionality by creating a new user. Use the Mongo shell to check the `users` collection - the new user's document should be there. 
+- Now try to delete the user!
+    - Do you get the correct alert message? Are you then logged out automatically?
+    - If so, try logging in as the same user. Does this still work?
+    - If you can no longer log in, this is a good sign! Finally, use the Mongo shell to check if the user still exists in your `users` collection. They should not exist any more.
+- If any of your testing gives an unexpected result, try to find and fix any bugs.
+
 # Task 8
 
 Now you can update the new `deleteAlbum` controller function in your backend to delete a specific album from the logged-in user's MongoDB document.

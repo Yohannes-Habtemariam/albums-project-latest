@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Logout from "../components/Logout";
+import Deregister from "../components/Deregister";
 
 const Albums = props => {
     const [firstName, setFirstName] = useState("");
@@ -117,6 +118,8 @@ const Albums = props => {
         }
     }
 
+    // Delete single album
+
     const deleteSingleAlbum = async event => {
         const albumId = event.target.parentElement.id;
 
@@ -130,7 +133,6 @@ const Albums = props => {
 
         try {
             if (response.ok) {
-                //setAlbums(parsedRes);
                 setAlbums(parsedRes)
             } else {
                 //throw new Error(parsedRes.message);
@@ -145,7 +147,10 @@ const Albums = props => {
     return (
         <div>
             <h2 id="greeting">Welcome {firstName}!</h2>
+
             <Logout logout={props.logout} />
+            <Deregister deregister={props.deregister}/>
+        
             <h1>Add an Album to the Collection!</h1>
 
             <form onSubmit={submitAlbum}>
@@ -164,6 +169,7 @@ const Albums = props => {
                 <button>Create Album</button>
             </form>
             <button onClick={deleteAllAlbums}>Delete Album</button>
+    
 
             <div>
                 <h2>Current Albums</h2>
